@@ -10,15 +10,22 @@
 		<link href="style.css" type="text/css" rel="stylesheet" />
 	</head>
 	<body>
-		<h1>Log In</h1>
-		{{#if msg}}
- 			<p class="msg">{{msg}}</p>
-		{{/if}}
-		<form action="/login" method="post">
-			<p>Username:<br /><input type="text" name="user" placeholder="your username" value="{{user}}" autofocus></p>
-			<p>Password:<br /><input type="password" name="pass" placeholder="your password" value=""></p>
-			<p><input type="submit" value="Log in"></p>
-		</form>
-		<p><a href="/register">register</a></p>
+		<div class="container">
+			<h1>Log In</h1>
+			{{#if msg}}
+				<p class="msg">{{msg}}</p>
+			{{/if}}
+			<hr>
+			<form action="/login" method="post">
+				<b>Username</b><br/><input type="text" name="user" placeholder="Enter Username" required>
+				<br/>
+				<b>Password</b><br/><input type="password" name="pass" placeholder="Enter Password" required>
+				<br/>
+				<button type="submit" class="mainbtn" value="Log in">Log in</button>
+			</form>
+		</div>
+		<div class="container footer">
+			<p> Do not have an account? <a href="/register">Register</a>.</p>
+		</div>
 	</body>
 </html>
