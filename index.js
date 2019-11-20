@@ -16,6 +16,7 @@ const session = require('koa-session')
 
 /* IMPORT CUSTOM MODULES */
 const User = require('./modules/user')
+const Stock = require('./modules/stock')
 
 const app = new Koa()
 const router = new Router()
@@ -49,6 +50,37 @@ router.get('/', async ctx => {
 	}
 })
 
+/**
+ * The stock page.
+ *
+ * @name Stock Page
+ * @route {GET} /stock
+ */
+router.get('/stock', async ctx => await ctx.render('register')) 
+
+/**
+ * The script to process new user registrations.
+ *
+ * @name Stock Script
+ * @route {POST} /stock
+ */
+router.post('/stock', koaBody, async ctx => {
+	try {
+		// extract the data from the request
+		const body = ctx.request.body;
+		console.log(body);
+		console.log('----------------------------');
+
+		// call the functions in the module
+		const stock = await new Stock(dbName)
+		await stock.add(body.item, body.qnty)
+		// await user.uploadPicture(path, type)
+		// redirect to the home page
+		ctx.redirect(`/?msg=new item "${body.item}" added`)
+	} catch(err) {
+		await ctx.render('error', {message: err.message})
+	}
+}) 
 /**
  * The user registration page.
  *
@@ -92,6 +124,11 @@ router.post('/login', async ctx => {
 		const user = await new User(dbName)
 		await user.login(body.user, body.pass)
 		ctx.session.authorised = true
+		
+		//console.log(body);
+		//console.log('-------------------')
+		
+	
 		return ctx.redirect('/?msg=you are now logged in...')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})

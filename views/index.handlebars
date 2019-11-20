@@ -4,13 +4,30 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Home Page</title>
+		<title>Stock Inventroy</title>
 		<meta name="description" content="form to add new books">
 		<meta name="author" content="Mark Tyers">
 		<link href="style.css" type="text/css" rel="stylesheet" />
 	</head>
 	<body>
 		<h1>Home</h1>
+		
 		<p>This is a secure page. Users need to have a valid account and be logged in to see it.</p>
+		<form action="/stock" enctype="multipart/form-data" method="post">
+			
+			<p>I will have my stock data here</p>
+
+			<form action="/stock" enctype="multipart/form-data" method="post">
+				<b>Item Name</b><br/><input type="text" placeholder="Enter Item" name="item" required>
+				<br/>
+				<b>Quantity<b/><br/><input type="number" placeholder="Enter Quantity" name="qnty" required>
+				<p><button type="submit" class="mainbtn" value="Create">Create</button></p>
+				
+			</form>
+		</form>
+		
+		
 		<p><a href="/logout">log out</a></p>
+
+	</body>
 </html>
