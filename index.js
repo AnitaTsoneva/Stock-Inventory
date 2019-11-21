@@ -68,15 +68,20 @@ router.post('/stock', koaBody, async ctx => {
 	try {
 		// extract the data from the request
 		const body = ctx.request.body;
-		console.log(body);
-		console.log('----------------------------');
+		//console.log(body);
+		//console.log('----------------------------');
 
 		// call the functions in the module
 		const stock = await new Stock(dbName)
-		await stock.add(body.item, body.qnty)
+		await stock.addItem(body.item, body.qnty)
+
+		var response = await stock.getAllItems();
+		//console.log('+++++++++++++++++');
+		//console.log(response)
+		//console.log('+++++++++++++++++');
 		// await user.uploadPicture(path, type)
 		// redirect to the home page
-		ctx.redirect(`/?msg=new item "${body.item}" added`)
+		//ctx.redirect(`/?msg=new item "${body.item}" added`)
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}

@@ -16,27 +16,17 @@ module.exports = class Stock {
 	}
 
 
-    async add(itemName, quantity) {
+	/**
+	 * 
+	 *  Checking if items exsist in the dabase, if not addimg more.
+	 *  TODO add option instead of adding new item to increase the quantity
+	*/
+    async addItem(itemName, quantity) {
 
         try {
-			if(itemName.length === 0) throw new Error('Missing item name')
-            if(quantity === 0) throw new Error('Missing quantity')
-            
-            let sql2 = `SELECT * FROM stock;`
-            const data2 = await this.db.get(sql2)
-            console.log('+++++++++++++++++');
-
-            console.log(data2);
-            console.log('+++++++++++++++++');
-
-
-
 			let sql = `SELECT COUNT(id) as records FROM stock WHERE itemName="${itemName}";`
 			const data = await this.db.get(sql)
-			if(data.records !== 0) throw new Error(`Item Name "${itemName}" already exists`)
-            
-            
-            //pass = await bcrypt.hash(pass, saltRounds)
+			//if(data.records !== 0) throw new Error(`Item Name "${itemName}" already exists`)
 			sql = `INSERT INTO stock(itemName, quantity) VALUES("${itemName}", "${quantity}")`
 			await this.db.run(sql)
 			return true
@@ -46,6 +36,32 @@ module.exports = class Stock {
         }
         
     }
+
+    async getAllItems() {
+
+        try {
+			let sql = `SELECT * FROM stock;`;
+			const data = await this.db.all(sql)
+			//if(data.records !== 0) throw new Error(`Item Name "${itemName}" already exists`)
+			console.log('++++++++00+++++++++');
+
+			console.log(data);
+			console.log('++++++++00+++++++++');
+            //pass = await bcrypt.hash(pass, saltRounds)
+			//sql = `INSERT INTO stock(itemName, quantity) VALUES("${itemName}", "${quantity}")`
+			//await this.db.run(sql)
+			return data;
+		} catch(err) {
+            console.log(err)
+			throw err
+        }
+	}
+	
+	async getItemBy() {
+
+        // TODO 
+    }
+
     
 
 }
