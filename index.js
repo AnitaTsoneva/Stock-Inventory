@@ -12,6 +12,8 @@ const staticDir = require('koa-static')
 const bodyParser = require('koa-bodyparser')
 const koaBody = require('koa-body')({multipart: true, uploadDir: '.'})
 const session = require('koa-session')
+const hbs = require('koa-hbs');
+
 //const jimp = require('jimp')
 
 /* IMPORT CUSTOM MODULES */
@@ -73,7 +75,7 @@ router.post('/stock', koaBody, async ctx => {
 
 		// call the functions in the module
 		const stock = await new Stock(dbName)
-		await stock.addItem(body.item, body.qnty)
+		await stock.addItem(body.ena_num, body.itemName, body.qnty)
 
 		var response = await stock.getAllItems();
 		//console.log('+++++++++++++++++');
@@ -125,16 +127,43 @@ router.get('/login', async ctx => {
 
 router.post('/login', async ctx => {
 	try {
-		const body = ctx.request.body
-		const user = await new User(dbName)
-		await user.login(body.user, body.pass)
-		ctx.session.authorised = true
+		const body = ctx.request.body;
+		const user = await new User(dbName);
+		await user.login(body.user, body.pass);
+		ctx.session.authorised = true;
+		//const response = ctx.res;
 		
-		//console.log(body);
-		//console.log('-------------------')
-		
+		//var myData = { username: body.user};
+		var data = [ { id: 1, title: 'Learning Node: Moving to the Server-Side' },
+		{ id: 2,
+		  title:
+		   'Web Development with Node and Express: Leveraging the JavaScript Stack' },
+		{ id: 3, title: 'JavaScript: The Good Parts' },
+		{ id: 4, title: 'Understanding Ecmascript 6' },
+		{ id: 5, title: 'The Principles of Object-Oriented JavaScript' },
+		{ id: 6, title: 'Using SQLite' },
+		{ id: 7,
+		  title:
+		   'Getting Started with SQL: A hands-on approach for beginners' },
+		{ id: 8, title: 'The Language of SQL' },
+		{ id: 9, title: 'Node.js, MongoDB and Angular Web Development' },
+		{ id: 10, title: 'MongoDB: The Definitive Guide' } ];
+
+		//var source   = document.getElementById("entry-template").innerHTML;
+		//var template = Handlebars.compile(source);	
 	
-		return ctx.redirect('/?msg=you are now logged in...')
+		//var context = {title: "My New Post", body: "This is my first post!"};
+		//var html    = template(context);
+		//handlebars.registerHelper('json',function(myData) {
+			//return new Handlebars.SafeString(JSON.stringify(myData))
+		//})
+		//var response = ctx.res;
+		//await response.render('login', {data});
+		//await ctx.render('index', {title: 'Favourite Books'})
+
+		console.log(data)
+		await ctx.render('index', {title: 'Favourite Books', books: data})
+		//return ctx.redirect('/?msg=you are now logged in...')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}

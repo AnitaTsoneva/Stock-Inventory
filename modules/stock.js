@@ -7,9 +7,13 @@ module.exports = class Stock {
 
     constructor(dbName = ':memory:') {
 		return (async() => {
+			
 			this.db = await sqlite.open(dbName)
+
+			const sql1 = 'DROP TABLE stock ;'
+			await this.db.run(sql1);
 			// we need this table to store the user accounts
-			const sql = 'CREATE TABLE IF NOT EXISTS stock (id INTEGER PRIMARY KEY AUTOINCREMENT, itemName TEXT, quantity VAR);'
+			const sql = 'CREATE TABLE IF NOT EXISTS stock (id INTEGER PRIMARY KEY AUTOINCREMENT, ena_num VAR, itemName TEXT, quantity VAR);'
 			await this.db.run(sql)
 			return this
 		})()
@@ -21,13 +25,13 @@ module.exports = class Stock {
 	 *  Checking if items exsist in the dabase, if not addimg more.
 	 *  TODO add option instead of adding new item to increase the quantity
 	*/
-    async addItem(itemName, quantity) {
+    async addItem(ena_num, itemName, quantity) {
 
         try {
-			let sql = `SELECT COUNT(id) as records FROM stock WHERE itemName="${itemName}";`
+			let sql = `SELECT COUNT(id) as records FROM stock WHERE ena_num="${ena_num}";`
 			const data = await this.db.get(sql)
-			//if(data.records !== 0) throw new Error(`Item Name "${itemName}" already exists`)
-			sql = `INSERT INTO stock(itemName, quantity) VALUES("${itemName}", "${quantity}")`
+			//if(data.records !== 0) throw new Error(`Item Name "${ena_num}" already exists`)
+			sql = `INSERT INTO stock(ena_num, itemName, quantity) VALUES("${ena_num}", "${itemName}" ,"${quantity}")`
 			await this.db.run(sql)
 			return true
 		} catch(err) {
@@ -37,18 +41,23 @@ module.exports = class Stock {
         
     }
 
+	/**
+	 * 
+	 *  Retrieveing all items in the database
+	 * 
+	*/
     async getAllItems() {
 
         try {
 			let sql = `SELECT * FROM stock;`;
 			const data = await this.db.all(sql)
-			//if(data.records !== 0) throw new Error(`Item Name "${itemName}" already exists`)
+			//if(data.records !== 0) throw new Error(`Item Name "${ena_num}" already exists`)
 			console.log('++++++++00+++++++++');
 
 			console.log(data);
 			console.log('++++++++00+++++++++');
             //pass = await bcrypt.hash(pass, saltRounds)
-			//sql = `INSERT INTO stock(itemName, quantity) VALUES("${itemName}", "${quantity}")`
+			//sql = `INSERT INTO stock(ena_num, quantity) VALUES("${ena_num}", "${quantity}")`
 			//await this.db.run(sql)
 			return data;
 		} catch(err) {
