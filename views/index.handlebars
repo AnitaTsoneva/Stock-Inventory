@@ -8,30 +8,67 @@
 		<meta name="description" content="form to add new books">
 		<meta name="author" content="Mark Tyers">
 		<link href="style.css" type="text/css" rel="stylesheet" />
+
+			
 	</head>
 	<body>
-		<h1>{{title}}</h1>
-		<ul>
-			{{#each books}}
-			<li>{{this.title}}</li>
-			{{/each}}
-		</ul>
-		<p>This is a secure page. Users need to have a valid account and be logged in to see it.</p>
-		<form action="/stock" enctype="multipart/form-data" method="post">
-			
-			<form action="/stock" enctype="multipart/form-data" method="post">
-				<b>Barcode (EAN) number</b><br/><input type="number" placeholder="Enter EAN number" name="ena_num" required>
-				<br/>
-				<b>Item Name</b><br/><input type="text" placeholder="Enter Item" name="itemName" required>
-				<br/>
-				<b>Quantity<b/><br/><input type="number" placeholder="Enter Quantity" name="qnty" required>
-				<p><button type="submit" class="mainbtn" value="Create">Add item</button></p>
-				
-			</form>
-		</form>
-		
-		
-		<p><a href="/logout">log out</a></p>
+		<br>
+		<h4>Welcome back, {{title}}!</h4>
+		<h3>Stock Level</h3>
 
+		<table>
+			<tr>
+				<th>EAN number</th>
+				<th>Name</th>
+				<th>Quantity</th>
+			</tr>
+		
+			<tr>
+				<td>Alfreds Futterkiste</td>
+				<td>Maria Anders</td>
+				<td>Germany</td>
+			</tr>
+			<tr>
+				<td>Centro comercial Moctezuma</td>
+				<td>Francisco Chang</td>
+				<td>Mexico</td>
+			</tr>
+			<tr>
+				<td>Ernst Handel</td>
+				<td>Roland Mendel</td>
+				<td>Austria</td>
+			</tr>
+			<tr>
+				<td>Island Trading</td>
+				<td>Helen Bennett</td>
+				<td>UK</td>
+			</tr>
+			<tr>
+				<td>Laughing Bacchus Winecellars</td>
+				<td>Yoshi Tannamuri</td>
+				<td>Canada</td>
+			</tr>
+			<tr>
+				<td>Magazzini Alimentari Riuniti</td>
+				<td>Giovanni Rovelli</td>
+				<td>Italy</td>
+			</tr>
+		</table>
+
+
+			
+		<form action="/stock" enctype="multipart/form-data" method="post">
+			<b>Barcode (EAN) number</b><br/><input type="number" placeholder="Enter EAN number" name="ena_num" required>
+			<br/>
+			<b>Item Name</b><br/><input type="text" placeholder="Enter Item" name="itemName" required>
+			<br/>
+			<b>Quantity<b/><br/><input type="number" placeholder="Enter Quantity" name="quantity" required>
+			<p><button type="submit" class="mainbtn" value="Create">Add item</button></p>
+					
+		</form>
+
+
+		<p><a href="/logout">log out</a></p>
+	
 	</body>
 </html>

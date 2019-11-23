@@ -25,13 +25,13 @@ module.exports = class Stock {
 	 *  Checking if items exsist in the dabase, if not addimg more.
 	 *  TODO add option instead of adding new item to increase the quantity
 	*/
-    async addItem(ena_num, itemName, quantity) {
+    async addItem(itemValues) {
 
         try {
-			let sql = `SELECT COUNT(id) as records FROM stock WHERE ena_num="${ena_num}";`
+			let sql = `SELECT COUNT(id) as records FROM stock WHERE ena_num="${itemValues.ena_num}";`
 			const data = await this.db.get(sql)
 			//if(data.records !== 0) throw new Error(`Item Name "${ena_num}" already exists`)
-			sql = `INSERT INTO stock(ena_num, itemName, quantity) VALUES("${ena_num}", "${itemName}" ,"${quantity}")`
+			sql = `INSERT INTO stock(ena_num, itemName, quantity) VALUES("${itemValues.ena_num}", "${itemValues.itemName}" ,"${itemValues.quantity}")`
 			await this.db.run(sql)
 			return true
 		} catch(err) {

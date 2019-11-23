@@ -58,7 +58,7 @@ router.get('/', async ctx => {
  * @name Stock Page
  * @route {GET} /stock
  */
-router.get('/stock', async ctx => await ctx.render('register')) 
+router.get('/stock', async ctx => await ctx.render('getAllItems')) 
 
 /**
  * The script to process new user registrations.
@@ -68,20 +68,18 @@ router.get('/stock', async ctx => await ctx.render('register'))
  */
 router.post('/stock', koaBody, async ctx => {
 	try {
-		// extract the data from the request
-		const body = ctx.request.body;
-		//console.log(body);
-		//console.log('----------------------------');
 
-		// call the functions in the module
+		const body = ctx.request.body;
+
 		const stock = await new Stock(dbName)
-		await stock.addItem(body.ena_num, body.itemName, body.qnty)
+		await stock.addItem(body)
 
 		var response = await stock.getAllItems();
-		//console.log('+++++++++++++++++');
-		//console.log(response)
-		//console.log('+++++++++++++++++');
-		// await user.uploadPicture(path, type)
+		console.log('+++++++++++++++++++++');
+
+		console.log(response)
+		console.log('+++++++++++++++++++++');
+		await ctx.render('index', {ena_num: response.ena_num, itemName:response.itemName, quantity:response.quantity})
 		// redirect to the home page
 		//ctx.redirect(`/?msg=new item "${body.item}" added`)
 	} catch(err) {
@@ -106,10 +104,12 @@ router.post('/register', koaBody, async ctx => {
 	try {
 		// extract the data from the request
 		const body = ctx.request.body
+		
 		console.log(body)
+		console.log('---------');
 		// call the functions in the module
 		const user = await new User(dbName)
-		await user.register(body.user, body.pass)
+		await user.register(body)
 		// await user.uploadPicture(path, type)
 		// redirect to the home page
 		ctx.redirect(`/?msg=new user "${body.name}" added`)
@@ -131,38 +131,13 @@ router.post('/login', async ctx => {
 		const user = await new User(dbName);
 		await user.login(body.user, body.pass);
 		ctx.session.authorised = true;
-		//const response = ctx.res;
 		
-		//var myData = { username: body.user};
-		var data = [ { id: 1, title: 'Learning Node: Moving to the Server-Side' },
-		{ id: 2,
-		  title:
-		   'Web Development with Node and Express: Leveraging the JavaScript Stack' },
-		{ id: 3, title: 'JavaScript: The Good Parts' },
-		{ id: 4, title: 'Understanding Ecmascript 6' },
-		{ id: 5, title: 'The Principles of Object-Oriented JavaScript' },
-		{ id: 6, title: 'Using SQLite' },
-		{ id: 7,
-		  title:
-		   'Getting Started with SQL: A hands-on approach for beginners' },
-		{ id: 8, title: 'The Language of SQL' },
-		{ id: 9, title: 'Node.js, MongoDB and Angular Web Development' },
-		{ id: 10, title: 'MongoDB: The Definitive Guide' } ];
+		var myData = { username: body.user};
 
-		//var source   = document.getElementById("entry-template").innerHTML;
-		//var template = Handlebars.compile(source);	
-	
-		//var context = {title: "My New Post", body: "This is my first post!"};
-		//var html    = template(context);
-		//handlebars.registerHelper('json',function(myData) {
-			//return new Handlebars.SafeString(JSON.stringify(myData))
-		//})
-		//var response = ctx.res;
-		//await response.render('login', {data});
 		//await ctx.render('index', {title: 'Favourite Books'})
 
-		console.log(data)
-		await ctx.render('index', {title: 'Favourite Books', books: data})
+		//console.log(data)
+		await ctx.render('index', {title: myData.username})
 		//return ctx.redirect('/?msg=you are now logged in...')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
