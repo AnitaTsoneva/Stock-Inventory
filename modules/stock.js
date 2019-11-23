@@ -10,8 +10,8 @@ module.exports = class Stock {
 			
 			this.db = await sqlite.open(dbName)
 
-			const sql1 = 'DROP TABLE stock ;'
-			await this.db.run(sql1);
+			//const sql1 = 'DROP TABLE stock ;'
+			//await this.db.run(sql1);
 			// we need this table to store the user accounts
 			const sql = 'CREATE TABLE IF NOT EXISTS stock (id INTEGER PRIMARY KEY AUTOINCREMENT, ena_num VAR, itemName TEXT, quantity VAR);'
 			await this.db.run(sql)
@@ -42,9 +42,7 @@ module.exports = class Stock {
     }
 
 	/**
-	 * 
 	 *  Retrieveing all items in the database
-	 * 
 	*/
     async getAllItems() {
 
@@ -52,11 +50,7 @@ module.exports = class Stock {
 			let sql = `SELECT * FROM stock;`;
 			const data = await this.db.all(sql)
 			//if(data.records !== 0) throw new Error(`Item Name "${ena_num}" already exists`)
-			console.log('++++++++00+++++++++');
 
-			console.log(data);
-			console.log('++++++++00+++++++++');
-            //pass = await bcrypt.hash(pass, saltRounds)
 			//sql = `INSERT INTO stock(ena_num, quantity) VALUES("${ena_num}", "${quantity}")`
 			//await this.db.run(sql)
 			return data;

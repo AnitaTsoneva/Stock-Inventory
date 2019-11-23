@@ -58,7 +58,19 @@ router.get('/', async ctx => {
  * @name Stock Page
  * @route {GET} /stock
  */
-router.get('/stock', async ctx => await ctx.render('getAllItems')) 
+router.get('/stock_get', async ctx => {
+
+	try {
+		var response = await stock.getAllItems();		
+		//await ctx.render('home', {title: 'Favourite Books', books: data})
+	} catch(err) {
+		ctx.body = err.message
+	}
+
+	//await ctx.render('getAllItems', response)
+
+}) 
+
 
 /**
  * The script to process new user registrations.
@@ -74,12 +86,9 @@ router.post('/stock', koaBody, async ctx => {
 		const stock = await new Stock(dbName)
 		await stock.addItem(body)
 
-		var response = await stock.getAllItems();
-		console.log('+++++++++++++++++++++');
+		//var response = await stock.getAllItems();
+		//await ctx.render('index', response)
 
-		console.log(response)
-		console.log('+++++++++++++++++++++');
-		await ctx.render('index', {ena_num: response.ena_num, itemName:response.itemName, quantity:response.quantity})
 		// redirect to the home page
 		//ctx.redirect(`/?msg=new item "${body.item}" added`)
 	} catch(err) {
@@ -131,13 +140,12 @@ router.post('/login', async ctx => {
 		const user = await new User(dbName);
 		await user.login(body.user, body.pass);
 		ctx.session.authorised = true;
+	
+		const stock = await new Stock(dbName)
+		var items = await stock.getAllItems();
+
+		await ctx.render('index', {username: body.user, books: items})
 		
-		var myData = { username: body.user};
-
-		//await ctx.render('index', {title: 'Favourite Books'})
-
-		//console.log(data)
-		await ctx.render('index', {title: myData.username})
 		//return ctx.redirect('/?msg=you are now logged in...')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
