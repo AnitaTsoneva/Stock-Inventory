@@ -13,20 +13,33 @@ module.exports = class User {
 		return (async() => {
 
 			this.db = await sqlite.open(dbName)
+<<<<<<< HEAD
 
 			//const sql1 = 'DROP TABLE users;'
 			//await this.db.run(sql1)
 			// we need this table to store the user accounts
 			const sql = 'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT, pass TEXT , department TEXT);'
+=======
+			//const sql2 = 'DROP TABLE users;'
+			//await this.db.run(sql2)
+
+			// we need this table to store the user accounts
+			const sql = 'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT, pass TEXT, department TEXT);'
+>>>>>>> release/RELEASE
 			await this.db.run(sql)
 			return this
 		})()
 	}
 
 	async register(userValues) {
+<<<<<<< HEAD
 		
 		try {
 
+=======
+		try {
+			console.log(userValues.user)
+>>>>>>> release/RELEASE
 			if(userValues.user.length === 0) throw new Error('missing username')
 			if(userValues.pass.length === 0) throw new Error('missing password')
 			let sql = `SELECT COUNT(id) as records FROM users WHERE user="${userValues.user}";`
