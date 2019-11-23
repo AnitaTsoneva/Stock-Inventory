@@ -19,9 +19,16 @@
 				<br/>
 				<b>Password<b/><br/><input type="password" placeholder="Enter Password" name="pass" required>
 				<br/>
-				<b>Profile Picture<b/><br /><input type="file" name="avatar">
+				<b>Select department: <b/><br/><br/>
+				<label class="container-radio-button">Stock control<input type="radio" checked="checked" name="department" value="stock_control"><span class="checkmark"></span></label>
+				<label class="container-radio-button">Returns<input type="radio" checked="checked" name="department" value="retruns"><span class="checkmark"></span></label>
+				<label class="container-radio-button">Till<input type="radio" checked="checked" name="department" value="till"><span class="checkmark"></span></label>
+				<label class="container-radio-button">Adulting team<input type="radio" checked="checked" name="department" value="adulting_team"><span class="checkmark"></span></label>
+
+				<br/>
+				<b>Profile Picture<b/><br/><input type="file" name="avatar">
 				<p><button type="submit" class="mainbtn" value="Create">Create</button></p>
-				
+
 			</form>
 			<div class="container footer">
 				<p> Already have an account? <a href="/">Log in</a></p>
