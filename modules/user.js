@@ -11,23 +11,28 @@ module.exports = class User {
 
 	constructor(dbName = ':memory:') {
 		return (async() => {
+
 			this.db = await sqlite.open(dbName)
+			//const sql2 = 'DROP TABLE users;'
+			//await this.db.run(sql2)
+
 			// we need this table to store the user accounts
-			const sql = 'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT, pass TEXT);'
+			const sql = 'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT, pass TEXT, department TEXT);'
 			await this.db.run(sql)
 			return this
 		})()
 	}
 
-	async register(user, pass) {
+	async register(userValues) {
 		try {
-			if(user.length === 0) throw new Error('missing username')
-			if(pass.length === 0) throw new Error('missing password')
-			let sql = `SELECT COUNT(id) as records FROM users WHERE user="${user}";`
+			console.log(userValues.user)
+			if(userValues.user.length === 0) throw new Error('missing username')
+			if(userValues.pass.length === 0) throw new Error('missing password')
+			let sql = `SELECT COUNT(id) as records FROM users WHERE user="${userValues.user}";`
 			const data = await this.db.get(sql)
-			if(data.records !== 0) throw new Error(`username "${user}" already in use`)
-			pass = await bcrypt.hash(pass, saltRounds)
-			sql = `INSERT INTO users(user, pass) VALUES("${user}", "${pass}")`
+			if(data.records !== 0) throw new Error(`username "${userValues.user}" already in use`)
+			userValues.pass = await bcrypt.hash(userValues.pass, saltRounds)
+			sql = `INSERT INTO users(user, pass, department) VALUES("${userValues.user}", "${userValues.pass}", "${userValues.department}")`
 			await this.db.run(sql)
 			return true
 		} catch(err) {
