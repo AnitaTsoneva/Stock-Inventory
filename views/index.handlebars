@@ -9,44 +9,58 @@
 		<meta name="author" content="Mark Tyers">
 		<link href="style.css" type="text/css" rel="stylesheet" />
 
-		<div class="header">
-  			<a href="#default" class="logo">The Inventory</a>
-  			<div class="header-right">
-    		<a class="active" href="#home">Stock</a>
-			<a href="/stock_add">Add items</a>
-    		<a href="#about">Account</a>
-  		</div>
+		<div class="navbar">
+		
+		<div class="subnav">
+			<a href="#default" align="left" class="logo">The Inventory</a>
+			<button class="subnavbtn">My account <i class="fa fa-caret-down"></i></button>
+			<div class="subnav-content">
+			<a href="/logout">Log out</a>
+			<a href="#team">Permissions</a>	
+		</div>
+		</div> 
+		<div class="subnav">
+			<button class="subnavbtn">Stock <i class="fa fa-caret-down"></i></button>
+			<div class="subnav-content">
+				{{#each department}}
+					{{#if this.stock_control}}
+						<a href="/stock_add">Add Items</a>
+					{{/if}}
+					{{#if this.returns}}
+						<a href="/stock_add">Returned items</a>
+					{{/if}}
+					{{#if this.till}}
+						<a href="/stock_add">Sold Items</a>
+					{{/if}}
+					{{#if this.adulting_team}}
+						<a href="/stock_add">Modify stock</a>
+					{{/if}}
+				{{/each}}
+			</div>
+		</div> 
+		<a href="/">Home</a>
+		</div>
+			
 			
 	</head>
 	<body>
 		<br>
 		<h4>Welcome back, {{this.username}}!</h4>
 
-		{{#each department}}
-			{{#if this.stock_control}}
-				<h3>stock_control</h3>
-			{{/if}}
-			{{#if this.returns}}
-				<h3>returns</h3>
-			{{/if}}
-			{{#if this.till}}
-				<h3>till</h3>
-			{{/if}}
-			{{#if this.adulting_team}}
-				<h3>adulting_team</h3>
-			{{/if}}
-		{{/each}}
-
 		<table>
 			<tr>
    				<th>EAN Number</th>
 				<th>Item Name</th>
-				<th>Quantity</th>
+				<th>Category</th>
+				<th>Location</th>
+				<th>Quantity Available</th>
   			</tr>
 			{{#each items}}
 			<tr>
 				<th>{{this.ena_num}}</th>
 				<th>{{this.itemName}}</th>
+				<th>Category</th>
+				<th>Location</th>
 				<th>{{this.quantity}}</th>
 			</tr>
 			{{/each}}
@@ -55,17 +69,15 @@
 		<br/>
 		
 		<form action="/stock" enctype="multipart/form-data" method="post">
-			<b>Barcode (EAN) number</b><br/><input type="number" placeholder="Enter EAN number" name="ena_num" required>
+			<b>Barcode (EAN) number</b><br/><input type="number" placeholder="Enter EAN number" name="ena_num" min="0" max="100000" required>
 			<br/>
 			<b>Item Name</b><br/><input type="text" placeholder="Enter Item" name="itemName" required>
 			<br/>
-			<b>Quantity<b/><br/><input type="number" placeholder="Enter Quantity" name="quantity" required>
-			<p><button type="submit" class="mainbtn" value="Create">Add item</button></p>
+			<b>Quantity<b/><br/><input type="number" placeholder="Enter Quantity" name="quantity" min="0" max="1000" required>
+						
+			<p><input type="reset" class="mainbtn" value="Clear"> <button type="submit" class="mainbtn" value="Create">Add item</button></p>
 						
 		</form>
-
-
-		<p><a href="/logout">log out</a></p>
 	
 	</body>
 </html>

@@ -13,7 +13,7 @@ module.exports = class Stock {
 			//const sql1 = 'DROP TABLE stock ;'
 			//await this.db.run(sql1);
 			// we need this table to store the user accounts
-			const sql = 'CREATE TABLE IF NOT EXISTS stock (id INTEGER PRIMARY KEY AUTOINCREMENT, ena_num VAR, itemName TEXT, quantity INTEGER);'
+			const sql = 'CREATE TABLE IF NOT EXISTS stock (id INTEGER PRIMARY KEY AUTOINCREMENT, ena_num VAR, itemName TEXT, category TEXT, location TEXT, quantity INTEGER);'
 			await this.db.run(sql)
 			return this
 		})()
@@ -41,7 +41,7 @@ module.exports = class Stock {
 				return true
 
 			}else{
-				sql = `INSERT INTO stock(ena_num, itemName, quantity) VALUES("${itemValues.ena_num}", "${itemValues.itemName}" ,"${itemValues.quantity}")`
+				sql = `INSERT INTO stock(ena_num, itemName, category, location, quantity) VALUES("${itemValues.ena_num}", "${itemValues.itemName}", "${itemValues.category}", "${itemValues.location}", "${itemValues.quantity}")`
 				await this.db.run(sql)
 				return true
 			}
