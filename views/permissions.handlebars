@@ -7,11 +7,42 @@
 		<meta name="description" content="form to add new books">
 		<meta name="author" content="Anita Tsoneva">
 		<link href="style.css" type="text/css" rel="stylesheet" />
+        <div class="navbar">
+		
+		<div class="subnav">
+			
+			<button class="subnavbtn">My account <i class="fa fa-caret-down"></i></button>
+			<div class="subnav-content">
+			<a href="/logout">Log out</a>
+			<a href="/view_permissions">Permissions</a>	
+		</div>
+		</div> 
+		<div class="subnav">
+			<button class="subnavbtn">Stock <i class="fa fa-caret-down"></i></button>
+			<div class="subnav-content">
+				{{#each department}}
+					{{#if this.stock_control}}
+						<a href="/stock_add">Add Items</a>
+					{{/if}}
+					{{#if this.returns}}
+						<a href="/stock_add">Returned items</a>
+					{{/if}}
+					{{#if this.till}}
+						<a href="/stock_add">Sold Items</a>
+					{{/if}}
+					{{#if this.adulting_team}}
+						<a href="/stock_add">Modify stock</a>
+					{{/if}}
+				{{/each}}
+			</div>
+		</div> 
+		<a href="/">Home</a>
+		</div>
 	</head>
 	<body>
 		<div class="container">
+            <br>
 			<h1>Check employees permissions in the table below</h1>
-			
 			<table id="items">
 			<tr>
                 <th>        </th>
@@ -20,7 +51,6 @@
 				<th>Till</th>
 				<th>Adulting team</th>
   			</tr>
-			
 			<tr>
                 <td>Check the stock levels</td>
 				<td><font color="green">&#10004;</font></td>
@@ -28,7 +58,6 @@
 				<td><font color="green">&#10004;</font></td>
                 <td><font color="green">&#10004;</font></td>
 			</tr>
-            
 			<tr>
 				<td>Add Items(s)</td>
                 <td><font color="green">&#10004;</font></td>
@@ -36,7 +65,6 @@
 				<td><font color="red">&#10006;</font></td>
                 <td><font color="green">&#10004;</font></td>
 			</tr>
-			
             <tr>
 				
 				<td>Remove Items(s)</td>
@@ -46,7 +74,6 @@
                 <td><font color="green">&#10004;</font></td>
 			</tr>
             <tr>
-
 				<td>View overall sales</td>
                 <td><font color="green">&#10004;</font></td>
 				<td><font color="green">&#10004;</font></td>

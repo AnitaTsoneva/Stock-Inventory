@@ -53,18 +53,23 @@ router.get('/', async ctx => {
 });
 
 /**
- * The stock page.
+ * The user permissions page.
  *
- * @name Stock Page
- * @route {GET} /stock
+ * @name View_permissions Page
+ * @route {GET} /view_permissions
  */
 router.get('/view_permissions', async ctx => {
 
 	try {
-		//var response = await stock.getAllItems();		
+		const body = ctx.request.body;
+		console.log(body)
+		console.log('^^^^^^^^^^^^^^^^^^^^^^')
+		//var response = await stock.getAllItems();
+		//const user = await new User(dbName);	
+		//var department = await user.user_department(body.user);	
 		//await ctx.render('home', {title: 'Favourite Books', books: data})
 		//ctx.redirect(`/?msg=new user "${body.name}" added`)
-		await ctx.render('permissions', {username: 'Anita'})
+		await ctx.render('permissions', {department: 'Anita'})
 	} catch(err) {
 		ctx.body = err.message
 	}
@@ -103,6 +108,10 @@ router.post('/stock', koaBody, async ctx => {
 	try {
 
 		const body = ctx.request.body;
+		console.log('******************************')
+
+		console.log(ctx.request.body)
+		console.log('******************************')
 		const stock = await new Stock(dbName)
 		await stock.addItem(body)
 
@@ -116,15 +125,15 @@ router.post('/stock', koaBody, async ctx => {
 	}
 }); 
 
-router.post('/stock_add', koaBody, async ctx => {
+router.get('/stock_add', async ctx => {
 	try {
 		console.log('Im hereeeee')
-		//const body = ctx.request.body;
+		const body = ctx.request.body;
 		//const stock = await new Stock(dbName)
 		//await stock.addItem(body)
 
 		//var response = await stock.getAllItems();
-		//await ctx.render('index', response)
+		await ctx.render('stock_add', body)
 
 		// redirect to the home page
 		//ctx.redirect(`/?msg=new item "${body.item}" added`)
@@ -132,6 +141,9 @@ router.post('/stock_add', koaBody, async ctx => {
 		await ctx.render('error', {message: err.message})
 	}
 });
+
+
+
 /**
  * The user registration page.
  *
@@ -202,8 +214,8 @@ router.post('/login', async ctx => {
 		const stock = await new Stock(dbName)
 		var items = await stock.getAllItems();
 
-		console.log(department);
-		console.log('***************')
+		//console.log(department);
+		//console.log('***************')
 
 		await ctx.render('index', {username: body.user, department:department, items: items})
 		//return ctx.redirect('/?msg=you are now logged in...')

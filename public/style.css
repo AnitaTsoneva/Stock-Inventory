@@ -192,6 +192,17 @@ body {
     background-color: #8F8E8D;
     color: white;
   }  
+/* ------- Drop down button ----------- */
+  
+  .select {
+    width: 20%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+  }
+
 
 /*------- Department radio buttons --------*/
   input[type=text], input[type=password], input[type=number] {

@@ -51,17 +51,13 @@
 			<tr>
    				<th>EAN Number</th>
 				<th>Item Name</th>
-				<th>Category</th>
-				<th>Location</th>
 				<th>Quantity Available</th>
 				<th>Price per item</th>
   			</tr>
 			{{#each items}}
 			<tr>
 				<td>{{this.ena_num}}</td>
-				<td>{{this.itemName}}</td>
-				<td>Category</td>
-				<td>Location</td>
+				<td>{{this.item_name}}</td>
 				<td>{{this.quantity}}</td>
 				<td>Price per item</td>
 			</tr>
@@ -69,17 +65,6 @@
 		</table>
   
 		<br/>
-		
-		<form action="/stock" enctype="multipart/form-data" method="post">
-			<b>Barcode (EAN) number</b><br/><input type="number" placeholder="Enter EAN number" name="ena_num" min="0" max="100000" required>
-			<br/>
-			<b>Item Name</b><br/><input type="text" placeholder="Enter Item" name="itemName" required>
-			<br/>
-			<b>Quantity<b/><br/><input type="number" placeholder="Enter Quantity" name="quantity" min="0" max="1000" required>
-						
-			<p><input type="reset" class="mainbtn" value="Clear"> <button type="submit" class="mainbtn" value="Create">Add item</button></p>
-						
-		</form>
 	
 	</body>
 </html>
