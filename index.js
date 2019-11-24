@@ -58,6 +58,27 @@ router.get('/', async ctx => {
  * @name Stock Page
  * @route {GET} /stock
  */
+router.get('/view_permissions', async ctx => {
+
+	try {
+		//var response = await stock.getAllItems();		
+		//await ctx.render('home', {title: 'Favourite Books', books: data})
+		//ctx.redirect(`/?msg=new user "${body.name}" added`)
+		await ctx.render('permissions', {username: 'Anita'})
+	} catch(err) {
+		ctx.body = err.message
+	}
+
+	//await ctx.render('getAllItems', response)
+
+});
+
+/**
+ * The stock page.
+ *
+ * @name Stock Page
+ * @route {GET} /stock
+ */
 router.get('/stock_get', async ctx => {
 
 	try {

@@ -12,11 +12,11 @@
 		<div class="navbar">
 		
 		<div class="subnav">
-			<a href="#default" align="left" class="logo">The Inventory</a>
+			
 			<button class="subnavbtn">My account <i class="fa fa-caret-down"></i></button>
 			<div class="subnav-content">
 			<a href="/logout">Log out</a>
-			<a href="#team">Permissions</a>	
+			<a href="/view_permissions">Permissions</a>	
 		</div>
 		</div> 
 		<div class="subnav">
@@ -47,21 +47,23 @@
 		<br>
 		<h4>Welcome back, {{this.username}}!</h4>
 
-		<table>
+		<table id="items">
 			<tr>
    				<th>EAN Number</th>
 				<th>Item Name</th>
 				<th>Category</th>
 				<th>Location</th>
 				<th>Quantity Available</th>
+				<th>Price per item</th>
   			</tr>
 			{{#each items}}
 			<tr>
-				<th>{{this.ena_num}}</th>
-				<th>{{this.itemName}}</th>
-				<th>Category</th>
-				<th>Location</th>
-				<th>{{this.quantity}}</th>
+				<td>{{this.ena_num}}</td>
+				<td>{{this.itemName}}</td>
+				<td>Category</td>
+				<td>Location</td>
+				<td>{{this.quantity}}</td>
+				<td>Price per item</td>
 			</tr>
 			{{/each}}
 		</table>
