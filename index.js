@@ -174,15 +174,17 @@ router.post('/login', async ctx => {
 		const body = ctx.request.body;
 		const user = await new User(dbName);
 		await user.login(body.user, body.pass);
+
+		var department = await user.user_department(body.user);
 		ctx.session.authorised = true;
 	
 		const stock = await new Stock(dbName)
 		var items = await stock.getAllItems();
 
-		console.log(body);
+		console.log(department);
 		console.log('***************')
-		await ctx.render('index', {username: body.user, books: items})
-		
+
+		await ctx.render('index', {username: body.user, department:department, items: items})
 		//return ctx.redirect('/?msg=you are now logged in...')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})

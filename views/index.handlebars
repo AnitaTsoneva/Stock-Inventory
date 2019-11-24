@@ -21,7 +21,21 @@
 	<body>
 		<br>
 		<h4>Welcome back, {{this.username}}!</h4>
-		<h3>Stock Level</h3>
+
+		{{#each department}}
+			{{#if this.stock_control}}
+				<h3>stock_control</h3>
+			{{/if}}
+			{{#if this.returns}}
+				<h3>returns</h3>
+			{{/if}}
+			{{#if this.till}}
+				<h3>till</h3>
+			{{/if}}
+			{{#if this.adulting_team}}
+				<h3>adulting_team</h3>
+			{{/if}}
+		{{/each}}
 
 		<table>
 			<tr>
@@ -29,7 +43,7 @@
 				<th>Item Name</th>
 				<th>Quantity</th>
   			</tr>
-			{{#each books}}
+			{{#each items}}
 			<tr>
 				<th>{{this.ena_num}}</th>
 				<th>{{this.itemName}}</th>
