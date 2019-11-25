@@ -61,40 +61,10 @@ router.get('/', async ctx => {
 router.get('/view_permissions', async ctx => {
 
 	try {
-		const body = ctx.request.body;
-		console.log(body)
-		console.log('^^^^^^^^^^^^^^^^^^^^^^')
-		//var response = await stock.getAllItems();
-		//const user = await new User(dbName);	
-		//var department = await user.user_department(body.user);	
-		//await ctx.render('home', {title: 'Favourite Books', books: data})
-		//ctx.redirect(`/?msg=new user "${body.name}" added`)
-		await ctx.render('permissions', {department: 'Anita'})
+		await ctx.render('permissions')
 	} catch(err) {
 		ctx.body = err.message
 	}
-
-	//await ctx.render('getAllItems', response)
-
-});
-
-/**
- * The stock page.
- *
- * @name Stock Page
- * @route {GET} /stock
- */
-router.get('/stock_get', async ctx => {
-
-	try {
-		var response = await stock.getAllItems();		
-		//await ctx.render('home', {title: 'Favourite Books', books: data})
-	} catch(err) {
-		ctx.body = err.message
-	}
-
-	//await ctx.render('getAllItems', response)
-
 });
 
 
@@ -108,40 +78,74 @@ router.post('/stock', koaBody, async ctx => {
 	try {
 
 		const body = ctx.request.body;
-		console.log('******************************')
-
-		console.log(ctx.request.body)
-		console.log('******************************')
+		//console.log(ctx.request.body)
+		
 		const stock = await new Stock(dbName)
-		await stock.addItem(body)
-
-		//var response = await stock.getAllItems();
-		//await ctx.render('index', response)
-
+		var result = await stock.addItem(body)
+		
+		//await ctx.render('success', body)
+		var response = await stock.getAllItems();
+		console.log('******************************')
+		console.log(response)
+		console.log('******************************')
+		await ctx.render('index', response)
+		ctx.redirect(`/index`)
 		// redirect to the home page
-		//ctx.redirect(`/?msg=new item "${body.item}" added`)
+
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
 }); 
 
-router.get('/stock_add', async ctx => {
-	try {
-		console.log('Im hereeeee')
-		const body = ctx.request.body;
-		//const stock = await new Stock(dbName)
-		//await stock.addItem(body)
 
+/**
+ * The script to process new user registrations.
+ *
+ * @name Stock_remove Script
+ * @route {POST} /stock_remove
+ */
+router.post('/stock_remove', async ctx => {
+	try {
+		const body = ctx.request.body;
+		
+		console.log('**************77****************')
+
+		console.log(body)
+		console.log('**************77****************')
+		const stock = await new Stock(dbName)
+		//var result = await stock.removeItem(body)
+		//console.log(body)
+		//await ctx.render('success', body)
 		//var response = await stock.getAllItems();
-		await ctx.render('stock_add', body)
+		//await ctx.render('index', response)
 
 		// redirect to the home page
-		//ctx.redirect(`/?msg=new item "${body.item}" added`)
+		//await ctx.render('error', {message: err.message})
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
 });
 
+router.post('/stock_add', async ctx => {
+	try {
+		const body = ctx.request.body;
+		//console.log(ctx.request.body)
+		
+		const stock = await new Stock(dbName)
+		var result = await stock.addItem(body)
+		
+		//await ctx.render('success', body)
+		var response = await stock.getAllItems();
+		console.log('******************************')
+		console.log(response)
+		console.log('******************************')
+		await ctx.render('index', response)
+		//ctx.redirect(`/?msg=new item "${body.item}" added`)
+		// redirect to the home page
+	} catch(err) {
+		await ctx.render('error', {message: err.message})
+	}
+});
 
 
 /**

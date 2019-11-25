@@ -6,7 +6,7 @@
 		<meta charset="utf-8">
 		<title>Stock Inventroy</title>
 		<meta name="description" content="form to add new books">
-		<meta name="author" content="Mark Tyers">
+		<meta name="author" content="Anita Tsoneva">
 		<link href="style.css" type="text/css" rel="stylesheet" />
 
 		<div class="navbar">
@@ -19,28 +19,8 @@
 			<a href="/view_permissions">Permissions</a>	
 		</div>
 		</div> 
-		<div class="subnav">
-			<button class="subnavbtn">Stock <i class="fa fa-caret-down"></i></button>
-			<div class="subnav-content">
-				{{#each department}}
-					{{#if this.stock_control}}
-						<a href="/stock_add">Add Items</a>
-					{{/if}}
-					{{#if this.returns}}
-						<a href="/stock_add">Returned items</a>
-					{{/if}}
-					{{#if this.till}}
-						<a href="/stock_add">Sold Items</a>
-					{{/if}}
-					{{#if this.adulting_team}}
-						<a href="/stock_add">Modify stock</a>
-					{{/if}}
-				{{/each}}
-			</div>
-		</div> 
-		<a href="/">Home</a>
+		<a href="/login">Home</a>
 		</div>
-			
 			
 	</head>
 	<body>
@@ -59,12 +39,68 @@
 				<td>{{this.ena_num}}</td>
 				<td>{{this.item_name}}</td>
 				<td>{{this.quantity}}</td>
-				<td>Price per item</td>
+				<td>{{this.product_price}}</td>
 			</tr>
 			{{/each}}
 		</table>
-  
 		<br/>
 	
+		{{#each department}}
+			{{#if this.stock_control}}
+				<h2 align="center">Add new items to the stock</h2>
+
+				<form action="/stock" align="center" enctype="multipart/form-data" method="post">
+					<br>
+					<b>Barcode (EAN) number</b><br/><input type="number" placeholder="Enter Barcode number" name="ena_num" min="0" max="100000" required>
+					<br/>
+					<b>Item Name</b><br/><input type="text" placeholder="Enter Item" name="item_name" required>
+					<br/>
+					<b>Select price</b><br/>
+					<input type="number" placeholder="Enter price" min="1" step="any" name="product_price"/>
+					</br>
+					<b>Quantity<b/><br/><input type="number" placeholder="Enter Quantity" name="quantity" min="0" max="1000" required>
+										
+					<p><input type="reset" class="mainbtn" value="Clear"> <button type="submit" class="mainbtn" value="Create">Add item</button></p>
+										
+				</form>
+			{{/if}}
+			{{#if this.returns}}
+				<h2 align="center">Add returned items to the stock</h2>
+
+				<form action="/stock" align="center" enctype="multipart/form-data" method="post">
+					<br>
+					<b>Barcode (EAN) number</b><br/><input type="number" placeholder="Enter Barcode number" name="ena_num" min="0" max="100000" required>
+					<br/>
+					<b>Item Name</b><br/><input type="text" placeholder="Enter Item" name="item_name" required>
+					<br/>
+					<b>Select price</b><br/>
+					<input type="number" placeholder="Enter price" min="1" step="any" name="product_price"/>
+					</br>
+					<b>Quantity<b/><br/><input type="number" placeholder="Enter Quantity" name="quantity" min="0" max="1000" required>
+										
+					<p><input type="reset" class="mainbtn" value="Clear"> <button type="submit" class="mainbtn" value="Create">Add item</button></p>
+										
+				</form>
+			{{/if}}
+			{{#if this.till}}
+				<h2 align="center">Remove sold item from the stock</h2>
+
+				<form action="/stock_remove" align="center" enctype="multipart/form-data" method="post">
+					<br>
+					<b>Barcode (EAN) number</b><br/><input type="number" placeholder="Enter Barcode number" name="ena_num" min="0" max="100000" required>
+					<br/>
+					<b>Quantity<b/><br/><input type="number" placeholder="Enter Quantity" name="quantity" min="0" max="1000" required>
+
+					<p>You have successfully removed the item with EAN number ... !</p>        
+					<p><input type="reset" class="mainbtn" value="Clear"> <button type="submit" class="mainbtn" value="Create">Remove item</button></p>
+										
+				</form>
+			{{/if}}
+			{{#if this.adulting_team}}
+				<a href="/stock_add">Modify stock</a>
+			{{/if}}
+		{{/each}}
+		<br></br>
+		
 	</body>
 </html>
