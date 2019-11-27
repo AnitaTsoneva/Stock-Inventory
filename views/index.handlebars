@@ -45,6 +45,10 @@
 		</table>
 		<br/>
 	
+		{{#if message}}
+			<div class="alert alert-danger">{{message}}</div>
+		{{/if}}
+
 		{{#each department}}
 			{{#if this.stock_control}}
 				<h2 align="center">Add new items to the stock</h2>

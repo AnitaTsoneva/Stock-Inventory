@@ -68,7 +68,13 @@ module.exports = class Stock {
 				const existingQuantity = await this.db.get(sql)
 				let newQuantity = existingQuantity.quantity - Number(itemValues.quantity);
 
-				sql = `UPDATE stock SET quantity = "${newQuantity}" WHERE ena_num="${itemValues.ena_num}";`
+				if(newQuantity !== 0){
+					sql = `UPDATE stock SET quantity = "${newQuantity}" WHERE ena_num="${itemValues.ena_num}";`
+				}else{
+					// If item 
+					sql = `DELETE FROM stock WHERE ena_num="${itemValues.ena_num}";`
+				}
+
 				await this.db.get(sql)
 				return true
 
