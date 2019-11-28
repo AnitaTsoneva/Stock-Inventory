@@ -86,28 +86,54 @@ module.exports = class Stock {
 			// Check if an item exists in stock table 
 			let sql = `SELECT COUNT(id) as records FROM stock WHERE ena_num="${itemValues.ena_num}";`
 			const data = await this.db.get(sql)
-			
-			
+
+			// Check if an item exists in stock sales table 
+			let sql_sales = `SELECT COUNT(id) as records FROM stock_sales WHERE ena_num="${itemValues.ena_num}";`
+			const data_sales = await this.db.get(sql)
 			console.log('&&&&&&&&&&&&&&&&&&&&&&&')
 			console.log(itemValues)
+			console.log(data_sales)
 			console.log('&&&&&&&&&&&&&&&&&&&&&&&')
+
 			// Check if item exist
 			if(data.records !== 0) {
 
-				let sql = `SELECT quantity, product_price FROM stock WHERE ena_num="${itemValues.ena_num}";`
+				let sql = `SELECT quantity, product_price FROM stock_sales WHERE ena_num="${itemValues.ena_num}";`
 				const item_specs = await this.db.get(sql);
 				let newQuantity = item_specs.quantity - Number(itemValues.quantity);
 
-				await addItemsToSalesTable(itemValues, newQuantity)
 				if(newQuantity === 0 || newQuantity < 0){
-					sql = `DELETE FROM stock WHERE ena_num="${itemValues.ena_num}";`
-					
-					
+					sql = `DELETE FROM stock WHERE ena_num="${itemValues.ena_num}";`	
 				}else{
-					sql = `UPDATE stock SET quantity = "${newQuantity}" WHERE ena_num="${itemValues.ena_num}";`
-					
-					
-					
+					sql = `UPDATE stock SET quantity = "${newQuantity}" WHERE ena_num="${itemValues.ena_num}";`		
+				}
+
+				// Check if item exists in sales table
+				if(data_sales.records !== 0) {
+
+					sql_sales = `SELECT quantity, product_price FROM stock WHERE ena_num="${itemValues.ena_num}";`
+					if(newQuantity === 0 || newQuantity < 0){
+						sql_sales = `INSERT INTO stock_sales (ena_num, quantity_sold, product_price) VALUES("${itemValues.ena_num}", "${item_specs.quantity}", "${item_specs.product_price}")`
+						await this.db.get(sql_sales)
+					}else{
+						sql_sales = `INSERT INTO stock_sales (ena_num, quantity_sold, product_price) VALUES("${itemValues.ena_num}", "${Number(itemValues.quantity)}", "${item_specs.product_price}")`
+						await this.db.get(sql_sales)
+						console.log('IME HEREEEEEE')
+						console.log(sql_sales)
+					}
+				// Item doesn't exist in sales table
+				}else{
+
+					if(newQuantity === 0 || newQuantity < 0){
+						sql_sales = `INSERT INTO stock_sales (ena_num, quantity_sold, product_price) VALUES("${itemValues.ena_num}", "${item_specs.quantity}", "${item_specs.product_price}")`
+						await this.db.get(sql_sales)
+					}else{
+						sql_sales = `INSERT INTO stock_sales (ena_num, quantity_sold, product_price) VALUES("${itemValues.ena_num}", "${Number(itemValues.quantity)}", "${item_specs.product_price}")`
+						await this.db.get(sql_sales)
+						console.log('IME HEREEEEEE')
+						console.log(sql_sales)
+					}
+				
 				}
 
 
@@ -145,29 +171,6 @@ module.exports = class Stock {
 			throw err
         }
 	}
-
-	async addItemsToSalesTable(itemValues, newQuantity) {
-		// Check if an item exists in stock sales table 
-		let sql_sales = `SELECT COUNT(id) as records FROM stock_sales WHERE ena_num="${itemValues.ena_num}";`
-		const data_sales = await this.db.get(sql)
-		console.log('Im in my neww function !!!!!!!!!')
-		if(data_sales.records !== 0) {
-
-			if(newQuantity === 0 || newQuantity < 0){
-				sql_sales = `INSERT INTO stock_sales (ena_num, quantity_sold, product_price) VALUES("${itemValues.ena_num}", "${item_specs.quantity}", "${item_specs.product_price}")`
-				await this.db.get(sql_sales)
-			}else{
-				sql_sales = `INSERT INTO stock_sales (ena_num, quantity_sold, product_price) VALUES("${itemValues.ena_num}", "${Number(itemValues.quantity)}", "${item_specs.product_price}")`
-				await this.db.get(sql_sales)
-				console.log('IME HEREEEEEE')
-				console.log(sql_sales)
-			}
-			
-		}else{
-			
-		
-		}
-	};
    
 
 }
