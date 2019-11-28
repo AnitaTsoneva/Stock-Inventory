@@ -25,7 +25,22 @@
 	</head>
 	<body>
 		<br>
-		<h4>Welcome back, {{this.username}}!</h4>
+		<h3>Welcome back, {{this.username}}! 
+			{{#each department}}
+				{{#if this.stock_control}}
+					You are a part of the Stock Control team!
+				{{/if}}
+				{{#if this.returns}}
+					You are a part of the Returns department!
+				{{/if}}
+				{{#if this.till}}
+					You are a part of the Till team!
+				{{/if}}
+				{{#if this.adulting_team}}
+					You are a part of the Auditing team!
+				{{/if}}
+			{{/each}}
+		</h3>
 
 		<table id="items">
 			<tr>
@@ -45,15 +60,12 @@
 		</table>
 		<br/>
 	
-		{{#if message}}
-			<div class="alert alert-danger">{{message}}</div>
-		{{/if}}
 
 		{{#each department}}
 			{{#if this.stock_control}}
 				<h2 align="center">Add new items to the stock</h2>
 
-				<form action="/stock" align="center" enctype="multipart/form-data" method="post">
+				<form action="/stock_add" align="center" enctype="multipart/form-data" method="post">
 					<br>
 					<b>Barcode (EAN) number</b><br/><input type="number" placeholder="Enter Barcode number" name="ena_num" min="0" max="100000" required>
 					<br/>
@@ -63,7 +75,10 @@
 					<input type="number" placeholder="Enter price" min="1" step="any" name="product_price"/>
 					</br>
 					<b>Quantity<b/><br/><input type="number" placeholder="Enter Quantity" name="quantity" min="0" max="1000" required>
-										
+
+					{{#if message}}
+						<p>{{message}}</p>
+					{{/if}}		
 					<p><input type="reset" class="mainbtn" value="Clear"> <button type="submit" class="mainbtn" value="Create">Add item</button></p>
 										
 				</form>
@@ -71,7 +86,7 @@
 			{{#if this.returns}}
 				<h2 align="center">Add returned items to the stock</h2>
 
-				<form action="/stock" align="center" enctype="multipart/form-data" method="post">
+				<form action="/stock_add" align="center" enctype="multipart/form-data" method="post">
 					<br>
 					<b>Barcode (EAN) number</b><br/><input type="number" placeholder="Enter Barcode number" name="ena_num" min="0" max="100000" required>
 					<br/>
@@ -94,8 +109,6 @@
 					<b>Barcode (EAN) number</b><br/><input type="number" placeholder="Enter Barcode number" name="ena_num" min="0" max="100000" required>
 					<br/>
 					<b>Quantity<b/><br/><input type="number" placeholder="Enter Quantity" name="quantity" min="0" max="1000" required>
-
-					<p>You have successfully removed the item with EAN number ... !</p>        
 					<p><input type="reset" class="mainbtn" value="Clear"> <button type="submit" class="mainbtn" value="Create">Remove item</button></p>
 										
 				</form>

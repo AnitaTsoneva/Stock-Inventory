@@ -106,24 +106,20 @@ router.post('/stock', koaBody, async ctx => {
 router.post('/stock_remove', koaBody, async ctx => {
 	try {
 		const body = ctx.request.body;
-		
-		console.log('**************77****************')
-
-		console.log(body)
-		console.log('**************77****************')
+	
 		const stock = await new Stock(dbName)
 		var result = await stock.removeItem(body)
-		console.log(result)
+
 		//await ctx.render('success', body)
 		//var response = await stock.getAllItems();
-		//await ctx.render('index', response)
+		//await ctx.render('index')
 
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
 });
 
-router.post('/stock_add', async ctx => {
+router.post('/stock_add', koaBody, async ctx => {
 	try {
 		const body = ctx.request.body;
 		//console.log(ctx.request.body)
@@ -135,8 +131,8 @@ router.post('/stock_add', async ctx => {
 		console.log('******************************')
 		console.log(response)
 		console.log('******************************')
-		await ctx.render('index', { message: 'Oops! Wrong password.'})
-		//ctx.redirect(`/?msg=new item "${body.item}" added`)
+		//await ctx.render('index', { message: 'Oops! Wrong password.'})
+		ctx.redirect(`/?msg=new item "${body.item}" added`)
 
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
@@ -213,7 +209,6 @@ router.post('/login', async ctx => {
 	
 		const stock = await new Stock(dbName)
 		var items = await stock.getAllItems();
-
 		await ctx.render('index', {username: body.user, department:department, items: items})
 		//return ctx.redirect('/?msg=you are now logged in...')
 	} catch(err) {
