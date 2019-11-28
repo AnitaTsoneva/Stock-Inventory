@@ -87,6 +87,8 @@ router.post('/stock', koaBody, async ctx => {
 		console.log('******************************')
 		console.log(response)
 		console.log('******************************')
+
+		
 		await ctx.render('index', response)
 		//ctx.redirect(`/index`)
 		// redirect to the home page
@@ -109,6 +111,8 @@ router.post('/stock_remove', koaBody, async ctx => {
 	
 		const stock = await new Stock(dbName)
 		var result = await stock.removeItem(body)
+
+		var overall_sales = await stock.getOverallSales();
 
 		//await ctx.render('success', body)
 		//var response = await stock.getAllItems();
