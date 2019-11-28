@@ -16,7 +16,7 @@ module.exports = class Stock {
 			const sql = 'CREATE TABLE IF NOT EXISTS stock (id INTEGER PRIMARY KEY AUTOINCREMENT, ena_num VAR, item_name TEXT, quantity INTEGER, product_price INTEGER);'
 			await this.db.run(sql)
 
-			const sql_new = 'CREATE TABLE IF NOT EXISTS stock_sales (id INTEGER PRIMARY KEY AUTOINCREMENT, ena_num VAR, quantity_sold INTEGER, product_price INTEGER);'
+			const sql_new = 'CREATE TABLE IF NOT EXISTS stock_sales (id INTEGER PRIMARY KEY AUTOINCREMENT, ena_num VAR, quantity INTEGER, product_price INTEGER);'
 			await this.db.run(sql_new)
 			return this
 		})()
@@ -93,7 +93,6 @@ module.exports = class Stock {
 			const data_sales = await this.db.get(sql_sales)
 			console.log('&&&&&&&&&&&&&&&&&&&&&&&')
 			console.log(itemValues)
-			console.log(data_sales)
 			console.log('&&&&&&&&&&&&&&&&&&&&&&&')
 
 			// Check if item exist
@@ -113,22 +112,16 @@ module.exports = class Stock {
 				// Check if item exists in sales table
 				if(data_sales.records !== 0) {
 
-					
 					// item doesn't exist in the db
 					sql_sales = `SELECT * FROM stock_sales WHERE ena_num="${itemValues.ena_num}";`
 					var item_sales_specs = await this.db.get(sql_sales);
-					console.log(item_sales_specs)
+
 					let newQuantity_sales = Number(item_sales_specs.quantity) + Number(itemValues.quantity);
-					console.log('----- new quantity ------')
-					console.log(Number(item_sales_specs.quantity),Number(itemValues.quantity) )
-					sql_sales = `UPDATE stock_sales SET quantity_sold = "${newQuantity_sales}" WHERE ena_num="${itemValues.ena_num}";`
-					await this.db.get(sql_sales)
-				
-				
+					sql_sales = `UPDATE stock_sales SET quantity = "${newQuantity_sales}" WHERE ena_num="${itemValues.ena_num}";`
+					await this.db.get(sql_sales)				
 				// Item doesn't exist in sales table
 				}else{
-
-					sql_sales = `INSERT INTO stock_sales (ena_num, quantity_sold, product_price) VALUES("${itemValues.ena_num}", "${Number(itemValues.quantity)}", "${item_specs.product_price}");`
+					sql_sales = `INSERT INTO stock_sales (ena_num, quantity, product_price) VALUES("${itemValues.ena_num}", "${Number(itemValues.quantity)}", "${item_specs.product_price}");`
 					await this.db.get(sql_sales)
 				}
 
@@ -151,13 +144,25 @@ module.exports = class Stock {
     async getOverallSales() {
 
         try {
+
+			let sql_sales = `SELECT COUNT(id) as records FROM stock_sales;`
+			//let sql_sales = `DROP TABLE stock_sales;`
+			const number_sold_items = await this.db.get(sql_sales);
+			
 			let sql = `SELECT * FROM stock_sales;`;
 			const data = await this.db.all(sql)
+
+			let overallSales = 0;
 			//if(data.records !== 0) throw new Error(`Item Name "${ena_num}" already exists`)
 			console.log('------ STOCK SALES ---------')
 			console.log(data)
-			//sql = `INSERT INTO stock(ena_num, quantity) VALUES("${ena_num}", "${quantity}")`
-			//await this.db.run(sql)
+			for(var i=0; i < number_sold_items; i++){
+				console.log('im hereeee')
+				overallSales = overallSales + (data[i].quantity*data[i].product_price);
+				console.log(overallSales)
+			}
+
+			//console.log(overallSales);
 			return data;
 		} catch(err) {
             console.log(err)
