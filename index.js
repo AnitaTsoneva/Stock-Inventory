@@ -78,15 +78,10 @@ router.post('/stock', koaBody, async ctx => {
 	try {
 
 		const body = ctx.request.body;
-		//console.log(ctx.request.body)
-		
 		const stock = await new Stock(dbName)
-		var result = await stock.addItem(body)
+		const result = await stock.addItem(body)
+		const response = await stock.getAllItems();
 		
-		var response = await stock.getAllItems();
-		console.log('******************************')
-		console.log(response)
-		console.log('******************************')
 
 		
 		await ctx.render('index', response)
@@ -132,6 +127,7 @@ router.post('/stock_add', koaBody, async ctx => {
 		var result = await stock.addItem(body)
 		
 		var response = await stock.getAllItems();
+		
 		console.log('******************************')
 		console.log(response)
 		console.log('******************************')
@@ -206,14 +202,16 @@ router.post('/login', async ctx => {
 	try {
 		const body = ctx.request.body;
 		const user = await new User(dbName);
+		const stock = await new Stock(dbName);
 		await user.login(body.user, body.pass);
 
 		var department = await user.user_department(body.user);
 		ctx.session.authorised = true;
 	
-		const stock = await new Stock(dbName)
-		var items = await stock.getAllItems();
-		await ctx.render('index', {username: body.user, department:department, items: items})
+		const overall_sales = await stock.getOverallSales();
+		const items = await stock.getAllItems();
+	
+		await ctx.render('index', {username: body.user, department:department, items: items, overall_sales:overall_sales})
 		//return ctx.redirect('/?msg=you are now logged in...')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})

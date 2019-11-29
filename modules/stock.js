@@ -20,8 +20,7 @@ module.exports = class Stock {
 			await this.db.run(sql_new)
 			return this
 		})()
-	}
-
+	};
 
 	/**
 	 *  Checking if item exsist in the dabase, if not addimg more.
@@ -136,39 +135,35 @@ module.exports = class Stock {
             console.log(err)
 			throw err
         }
-	}
+	};
 
 	/**
-	 *  Retrieveing all items in the database
+	 *  Retrieveing all sold items and calculating the overall sales
 	*/
     async getOverallSales() {
 
         try {
-
+			
 			let sql_sales = `SELECT COUNT(id) as records FROM stock_sales;`
 			//let sql_sales = `DROP TABLE stock_sales;`
 			const number_sold_items = await this.db.get(sql_sales);
 			
 			let sql = `SELECT * FROM stock_sales;`;
-			const data = await this.db.all(sql)
-
+			const data = await this.db.all(sql);
 			let overallSales = 0;
-			//if(data.records !== 0) throw new Error(`Item Name "${ena_num}" already exists`)
-			console.log('------ STOCK SALES ---------')
-			console.log(data)
-			for(var i=0; i < number_sold_items; i++){
-				console.log('im hereeee')
+			
+			// Multiply the price by the quantity
+			for(var i=0; i < number_sold_items.records; i++){
 				overallSales = overallSales + (data[i].quantity*data[i].product_price);
-				console.log(overallSales)
 			}
+			
+			return overallSales;
 
-			//console.log(overallSales);
-			return data;
 		} catch(err) {
             console.log(err)
 			throw err
         }
-	}
+	};
    
 
 }
