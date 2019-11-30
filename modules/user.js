@@ -13,33 +13,19 @@ module.exports = class User {
 		return (async() => {
 
 			this.db = await sqlite.open(dbName)
-<<<<<<< HEAD
-
-			//const sql1 = 'DROP TABLE users;'
-			//await this.db.run(sql1)
-			// we need this table to store the user accounts
-			const sql = 'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT, pass TEXT , department TEXT);'
-=======
 			//const sql2 = 'DROP TABLE users;'
 			//await this.db.run(sql2)
 
 			// we need this table to store the user accounts
 			const sql = 'CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT, pass TEXT, department TEXT);'
->>>>>>> release/RELEASE
 			await this.db.run(sql)
 			return this
 		})()
 	}
 
 	async register(userValues) {
-<<<<<<< HEAD
-		
 		try {
-
-=======
-		try {
-			console.log(userValues.user)
->>>>>>> release/RELEASE
+			//console.log(userValues.user)
 			if(userValues.user.length === 0) throw new Error('missing username')
 			if(userValues.pass.length === 0) throw new Error('missing password')
 			let sql = `SELECT COUNT(id) as records FROM users WHERE user="${userValues.user}";`
@@ -64,21 +50,45 @@ module.exports = class User {
 	async login(username, password) {
 		try {
 			let sql = `SELECT count(id) AS count FROM users WHERE user="${username}";`
-			const records = await this.db.get(sql)
+			const records = await this.db.get(sql);
 			if(!records.count) throw new Error(`Username "${username}" not found.`)
 			sql = `SELECT pass FROM users WHERE user = "${username}";`
-			const record = await this.db.get(sql)
-			var sql2 = `SELECT department FROM users WHERE user = "${username}";`
-			const department = await this.db.get(sql2)
+			const record = await this.db.get(sql);
 
-			console.log('///////////');
-			console.log(department)
-			const valid = await bcrypt.compare(password, record.pass)
-			if(valid === false) throw new Error(`Invalid password for account "${username}".`)
-			return true
+			const valid = await bcrypt.compare(password, record.pass);
+			if(valid === false) throw new Error(`Wrong password, "${username}"! Please try again.`);
+			return true;
+		} catch(err) {
+			throw err;
+		}
+	};
+
+
+	async user_department(username) {
+		try {
+			let department = [{stock_control:false}, {returns:false}, {till:false}, {adulting_team:false}];
+			var sql = `SELECT department FROM users WHERE user = "${username}";`
+			const db_response = await this.db.get(sql);	
+			
+			switch(db_response.department){
+				case 'stock_control':
+					department[0].stock_control = true;
+					break;
+				case 'returns':
+					department[1].returns = true;
+					break;
+				case 'till':
+					department[2].till = true;
+					break;
+				case 'adulting_team':
+					department[3].adulting_team = true;
+					break;
+			}
+			
+			return department;
 		} catch(err) {
 			throw err
 		}
-	}
+	};
 
 }

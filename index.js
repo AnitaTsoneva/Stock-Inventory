@@ -53,22 +53,18 @@ router.get('/', async ctx => {
 });
 
 /**
- * The stock page.
+ * The user permissions page.
  *
- * @name Stock Page
- * @route {GET} /stock
+ * @name View_permissions Page
+ * @route {GET} /view_permissions
  */
-router.get('/stock_get', async ctx => {
+router.get('/view_permissions', async ctx => {
 
 	try {
-		var response = await stock.getAllItems();		
-		//await ctx.render('home', {title: 'Favourite Books', books: data})
+		await ctx.render('permissions')
 	} catch(err) {
 		ctx.body = err.message
 	}
-
-	//await ctx.render('getAllItems', response)
-
 });
 
 
@@ -83,34 +79,58 @@ router.post('/stock', koaBody, async ctx => {
 
 		const body = ctx.request.body;
 		const stock = await new Stock(dbName)
-		await stock.addItem(body)
+		const result = await stock.addItem(body)
+		const response = await stock.getAllItems();
+		
 
-		//var response = await stock.getAllItems();
-		//await ctx.render('index', response)
-
+		
+		await ctx.render('index', response)
+		//ctx.redirect(`/index`)
 		// redirect to the home page
-		//ctx.redirect(`/?msg=new item "${body.item}" added`)
+
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
 }); 
 
-router.post('/stock_add', koaBody, async ctx => {
+
+/**
+ * The script to process new user registrations.
+ *
+ * @name Stock_remove Script
+ * @route {POST} /stock_remove
+ */
+router.post('/stock_remove', koaBody, async ctx => {
 	try {
-		console.log('Im hereeeee')
-		//const body = ctx.request.body;
-		//const stock = await new Stock(dbName)
-		//await stock.addItem(body)
+		const body = ctx.request.body;
+	
+		const stock = await new Stock(dbName)
+		var result = await stock.removeItem(body);
 
-		//var response = await stock.getAllItems();
-		//await ctx.render('index', response)
-
-		// redirect to the home page
-		//ctx.redirect(`/?msg=new item "${body.item}" added`)
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
 });
+
+router.post('/stock_add', koaBody, async ctx => {
+	try {
+		const body = ctx.request.body;
+		//console.log(ctx.request.body)
+		
+		const stock = await new Stock(dbName)
+		var result = await stock.addItem(body)
+		
+		var response = await stock.getAllItems();
+
+
+		ctx.redirect(`/?msg=new item "${body.item}" added`)
+
+	} catch(err) {
+		await ctx.render('error', {message: err.message})
+	}
+});
+
+
 /**
  * The user registration page.
  *
@@ -173,16 +193,16 @@ router.post('/login', async ctx => {
 	try {
 		const body = ctx.request.body;
 		const user = await new User(dbName);
+		const stock = await new Stock(dbName);
 		await user.login(body.user, body.pass);
+
+		var department = await user.user_department(body.user);
 		ctx.session.authorised = true;
 	
-		const stock = await new Stock(dbName)
-		var items = await stock.getAllItems();
-
-		console.log(body);
-		console.log('***************')
-		await ctx.render('index', {username: body.user, books: items})
-		
+		const overall_sales = await stock.getOverallSales();
+		const items = await stock.getAllItems();
+	
+		await ctx.render('index', {username: body.user, department:department, items: items, overall_sales:overall_sales})
 		//return ctx.redirect('/?msg=you are now logged in...')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
@@ -195,4 +215,4 @@ router.get('/logout', async ctx => {
 });
 
 app.use(router.routes())
-module.exports = app.listen(port, async() => console.log(`listening on port ${port}`))
+module.exports = app.listen(port, async() => console.log(`Listening on port.. ${port}`))

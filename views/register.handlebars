@@ -12,7 +12,7 @@
 		</head>
 		<body>
 			<h1>Create a new account</h1>
-			<p >Please fill in this form to create an account.</p>
+			<p>Please fill in this form to create an account.</p>
 			<hr>
 			<form action="/register" enctype="multipart/form-data" method="post">
 				<b>Username</b><br/><input type="text" placeholder="Enter Unsername" name="user" required>
@@ -21,13 +21,15 @@
 				<br/>
 				<b>Select department: <b/><br/><br/>
 				<label class="container-radio-button">Stock control<input type="radio" checked="checked" name="department" value="stock_control"><span class="checkmark"></span></label>
-				<label class="container-radio-button">Returns<input type="radio" checked="checked" name="department" value="retruns"><span class="checkmark"></span></label>
+				<label class="container-radio-button">Returns<input type="radio" checked="checked" name="department" value="returns"><span class="checkmark"></span></label>
 				<label class="container-radio-button">Till<input type="radio" checked="checked" name="department" value="till"><span class="checkmark"></span></label>
 				<label class="container-radio-button">Adulting team<input type="radio" checked="checked" name="department" value="adulting_team"><span class="checkmark"></span></label>
 
 				<br/>
 				<b>Profile Picture<b/><br/><input type="file" name="avatar">
-				<p><button type="submit" class="mainbtn" value="Create">Create</button></p>
+				<br/>
+				<h5>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</h5>
+				<p><input type="reset" class="mainbtn" value="Clear"> <button type="submit" class="mainbtn" value="Create">Create</button></p>
 
 			</form>
 			<div class="container footer">
