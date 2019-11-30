@@ -11,20 +11,20 @@
 
 		<div class="navbar">
 		
-		<div class="subnav">
-			
-			<button class="subnavbtn">My account <i class="fa fa-caret-down"></i></button>
-			<div class="subnav-content">
-			<a href="/logout">Log out</a>
-			<a href="/view_permissions">Permissions</a>	
-		</div>
-		</div> 
-		<a href="/login">Home</a>
+			<div class="subnav">
+				
+				<button class="subnavbtn">My account <i class="fa fa-caret-down"></i></button>
+				<div class="subnav-content">
+					<a href="/logout">Log out</a>
+					<a href="/view_permissions">Permissions</a>	
+				</div>
+			</div> 
+		
 		</div>
 			
 	</head>
 	<body>
-		<br>
+		<br></br>
 		<h3>Welcome back, {{this.username}}! 
 			{{#each department}}
 				{{#if this.stock_control}}
@@ -47,7 +47,8 @@
    				<th>EAN Number</th>
 				<th>Item Name</th>
 				<th>Quantity Available</th>
-				<th>Price per item</th>
+				<th>Price in £ (per item)</th>
+				<th>Number of sold items</th>
   			</tr>
 			{{#each items}}
 			<tr>
@@ -55,16 +56,18 @@
 				<td>{{this.item_name}}</td>
 				<td>{{this.quantity}}</td>
 				<td>{{this.product_price}}</td>
+				<td>{{this.quantity_sold}}</td>
 			</tr>
 			{{/each}}
+			<tr>
+				<td colspan="5" align="right"><b>Total £{{overall_sales}}</b></td>
+			</tr>
 		</table>
 		<br/>
-	
-		<h3 align="right">The overall sales are {{overall_sales}} </h3>
 
 		{{#each department}}
 			{{#if this.stock_control}}
-				<h2 align="center">Add new items to the stock</h2>
+				<h2 align="center">Add new item(s) to the stock</h2>
 
 				<form action="/stock_add" align="center" enctype="multipart/form-data" method="post">
 					<br>
@@ -85,7 +88,7 @@
 				</form>
 			{{/if}}
 			{{#if this.returns}}
-				<h2 align="center">Add returned items to the stock</h2>
+				<h2 align="center">Add returned item(s) to the stock</h2>
 
 				<form action="/stock_add" align="center" enctype="multipart/form-data" method="post">
 					<br>
@@ -103,7 +106,7 @@
 				</form>
 			{{/if}}
 			{{#if this.till}}
-				<h2 align="center">Remove sold item from the stock</h2>
+				<h2 align="center">Input sold item(s)</h2>
 
 				<form action="/stock_remove" align="center" enctype="multipart/form-data" method="post">
 					<br>
@@ -133,6 +136,7 @@
 										
 				</form>
 				<br>
+				<hr>
 				<h2 align="center">Modify the stock by removing items</h2>
 				<form action="/stock_remove" align="center" enctype="multipart/form-data" method="post">
 					<br>

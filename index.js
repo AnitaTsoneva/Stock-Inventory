@@ -105,13 +105,7 @@ router.post('/stock_remove', koaBody, async ctx => {
 		const body = ctx.request.body;
 	
 		const stock = await new Stock(dbName)
-		var result = await stock.removeItem(body)
-
-		var overall_sales = await stock.getOverallSales();
-
-		//await ctx.render('success', body)
-		//var response = await stock.getAllItems();
-		//await ctx.render('index')
+		var result = await stock.removeItem(body);
 
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
@@ -127,11 +121,8 @@ router.post('/stock_add', koaBody, async ctx => {
 		var result = await stock.addItem(body)
 		
 		var response = await stock.getAllItems();
-		
-		console.log('******************************')
-		console.log(response)
-		console.log('******************************')
-		//await ctx.render('index', { message: 'Oops! Wrong password.'})
+
+
 		ctx.redirect(`/?msg=new item "${body.item}" added`)
 
 	} catch(err) {
@@ -224,4 +215,4 @@ router.get('/logout', async ctx => {
 });
 
 app.use(router.routes())
-module.exports = app.listen(port, async() => console.log(`listening on port ${port}`))
+module.exports = app.listen(port, async() => console.log(`Listening on port.. ${port}`))

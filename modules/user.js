@@ -25,7 +25,7 @@ module.exports = class User {
 
 	async register(userValues) {
 		try {
-			console.log(userValues.user)
+			//console.log(userValues.user)
 			if(userValues.user.length === 0) throw new Error('missing username')
 			if(userValues.pass.length === 0) throw new Error('missing password')
 			let sql = `SELECT COUNT(id) as records FROM users WHERE user="${userValues.user}";`
@@ -50,18 +50,18 @@ module.exports = class User {
 	async login(username, password) {
 		try {
 			let sql = `SELECT count(id) AS count FROM users WHERE user="${username}";`
-			const records = await this.db.get(sql)
+			const records = await this.db.get(sql);
 			if(!records.count) throw new Error(`Username "${username}" not found.`)
 			sql = `SELECT pass FROM users WHERE user = "${username}";`
-			const record = await this.db.get(sql)
+			const record = await this.db.get(sql);
 
-			const valid = await bcrypt.compare(password, record.pass)
-			if(valid === false) throw new Error(`Wrong password, "${username}"! Please try again.`)
-			return true
+			const valid = await bcrypt.compare(password, record.pass);
+			if(valid === false) throw new Error(`Wrong password, "${username}"! Please try again.`);
+			return true;
 		} catch(err) {
-			throw err
+			throw err;
 		}
-	}
+	};
 
 
 	async user_department(username) {
@@ -85,10 +85,10 @@ module.exports = class User {
 					break;
 			}
 			
-			return department
+			return department;
 		} catch(err) {
 			throw err
 		}
-	}
+	};
 
 }
