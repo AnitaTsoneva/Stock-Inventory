@@ -46,10 +46,11 @@
     "handlebars-validate": "^0.1.2",
     "http-status-codes": "^1.3.2",
     "istanbul": "^0.4.5",
-    "jest": "^24.1.0",
+    "jest": "^24.9.0",
     "jscpd": "^2.0.16",
     "jsdoc": "^3.6.3",
     "jsdoc-route-plugin": "^0.1.0",
-    "markdownlint": "^0.17.0"
+    "markdownlint": "^0.17.0",
+    "supertest": "^4.0.2"
   }
 }

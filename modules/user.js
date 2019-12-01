@@ -9,6 +9,9 @@ const saltRounds = 10
 
 module.exports = class User {
 
+	/**
+	 * Constructor to create a table users if it doesn't exist.
+	 */
 	constructor(dbName = ':memory:') {
 		return (async() => {
 
@@ -23,9 +26,12 @@ module.exports = class User {
 		})()
 	}
 
+	/**
+	 * Register user.
+	 */
 	async register(userValues) {
 		try {
-			//console.log(userValues.user)
+
 			if(userValues.user.length === 0) throw new Error('missing username')
 			if(userValues.pass.length === 0) throw new Error('missing password')
 			let sql = `SELECT COUNT(id) as records FROM users WHERE user="${userValues.user}";`
@@ -40,6 +46,9 @@ module.exports = class User {
 		}
 	}
 
+	/**
+	 * Upload user's photo.
+	 */
 	async uploadPicture(path, mimeType) {
 		const extension = mime.extension(mimeType)
 		console.log(`path: ${path}`)
@@ -47,6 +56,9 @@ module.exports = class User {
 		//await fs.copy(path, `public/avatars/${username}.${fileExtension}`)
 	}
 
+	/**
+	 * Check if the user's creditions are correct.
+	 */
 	async login(username, password) {
 		try {
 			let sql = `SELECT count(id) AS count FROM users WHERE user="${username}";`
@@ -63,7 +75,9 @@ module.exports = class User {
 		}
 	};
 
-
+	/**
+	 * Find the user's department.
+	 */
 	async user_department(username) {
 		try {
 			let department = [{stock_control:false}, {returns:false}, {till:false}, {adulting_team:false}];

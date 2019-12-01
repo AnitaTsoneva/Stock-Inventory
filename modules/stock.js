@@ -5,6 +5,10 @@ const sqlite = require('sqlite-async');
 
 module.exports = class Stock {
 
+
+	/**
+	 * Constructor to create a table stock if it doesn't exist.
+	 */
     constructor(dbName = ':memory:') {
 		return (async() => {
 			

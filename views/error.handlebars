@@ -11,34 +11,15 @@
 
 		<div class="navbar">
 		
-		<div class="subnav">
-			
-			<button class="subnavbtn">My account <i class="fa fa-caret-down"></i></button>
-			<div class="subnav-content">
-			<a href="/logout">Log out</a>
-			<a href="/view_permissions">Permissions</a>	
-		</div>
-		</div> 
-		<div class="subnav">
-			<button class="subnavbtn">Stock <i class="fa fa-caret-down"></i></button>
-			<div class="subnav-content">
-				{{#each department}}
-					{{#if this.stock_control}}
-						<a href="/stock_add">Add Items</a>
-					{{/if}}
-					{{#if this.returns}}
-						<a href="/stock_add">Returned items</a>
-					{{/if}}
-					{{#if this.till}}
-						<a href="/stock_remove">Sold Items</a>
-					{{/if}}
-					{{#if this.adulting_team}}
-						<a href="/stock_add">Modify stock</a>
-					{{/if}}
-				{{/each}}
-			</div>
-		</div> 
-		<a href="/">Home</a>
+			<div class="subnav">
+				
+				<button class="subnavbtn">My account <i class="fa fa-caret-down"></i></button>
+				<div class="subnav-content">
+					<a href="/logout">Log out</a>
+					<a href="/view_permissions">Permissions</a>	
+				</div>
+			</div> 
+		
 		</div>
 	</head>
 	<body align="center">
