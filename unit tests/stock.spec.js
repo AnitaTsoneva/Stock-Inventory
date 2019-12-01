@@ -8,7 +8,7 @@ describe('Add items', () => {
 		expect.assertions(1)
 		const stock = await new Stock()
 		const item_added = await stock.addItem({ena_num:2897, item_name:'Motherboard', quantity: 3, product_price: 30.8, quantity_sold:0 })
-		expect(item_added).toBe(true)
+		expect(item_added.status).toBe(true)
 		done()
     });
 
@@ -17,7 +17,7 @@ describe('Add items', () => {
 		const stock = await new Stock()
         await stock.addItem({ena_num:2897, item_name:'Motherboard', quantity: 3, product_price: 30.8, quantity_sold:0 })
         const item_added = await stock.addItem({ena_num:2897, item_name:'Motherboard', quantity: 1, product_price: 30.8, quantity_sold:0 })
-		expect(item_added).toBe(true)
+		expect(item_added.status).toBe(true)
 		done()
     });
     
@@ -73,7 +73,7 @@ describe('Remove items', () => {
         const stock = await new Stock()
         await stock.addItem({ena_num:2897, item_name:'Motherboard', quantity: 8, product_price: 30.8, quantity_sold:0 })
 		const item_removed = await stock.removeItem({ena_num:2897, quantity: 3})
-		expect(item_removed).toBe(true)
+		expect(item_removed.status).toBe(true)
 		done()
     });
 
@@ -81,7 +81,7 @@ describe('Remove items', () => {
 		expect.assertions(1)
         const stock = await new Stock()
 		const item_removed = await stock.removeItem({ena_num:2197, quantity: 2})
-		expect(item_removed).toBe(false)
+		expect(item_removed.status).toBe(false)
 		done()
     });
 

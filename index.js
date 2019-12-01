@@ -98,8 +98,10 @@ router.post('/stock_remove', koaBody, async ctx => {
 	try {
 		const body = ctx.request.body;
 		const stock = await new Stock(dbName)
-		await stock.removeItem(body);
+		var response = await stock.removeItem(body);
 
+		if (response.status === true) await ctx.render('success', {message: response.message})
+		else  await ctx.render('error', {message: response.message})
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
@@ -109,10 +111,11 @@ router.post('/stock_add', koaBody, async ctx => {
 	try {
 		const body = ctx.request.body;
 		const stock = await new Stock(dbName)
-		await stock.addItem(body)
+		var response = await stock.addItem(body)
 		await stock.getAllItems();
 
-		ctx.redirect(`/?msg=new item "${body.item}" added`)
+		if (response.status === true) await ctx.render('success', {message: response.message})
+		else  await ctx.render('error', {message: response.message})
 
 	} catch(err) {
 		await ctx.render('error', {message: err.message})

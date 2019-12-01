@@ -32,12 +32,12 @@ module.exports = class Stock {
 				let newQuantity = Number(itemValues.quantity) + existingQuantity.quantity;
 
 				sql = `UPDATE stock SET quantity = "${newQuantity}" WHERE ena_num="${itemValues.ena_num}";`
-				await this.db.get(sql)
-				return true;
+				await this.db.get(sql);
+				return {status:true, message:`added item(s) with EAN "'${itemValues.ena_num}" to the stock`};
 
 			}else{
 				sql = `INSERT INTO stock(ena_num, item_name, quantity, product_price, quantity_sold) VALUES("${itemValues.ena_num}", "${itemValues.item_name}", "${itemValues.quantity}", "${itemValues.product_price}", "0")`
-				await this.db.run(sql); return true;
+				await this.db.run(sql); return {status:true, message:`added item(s) with EAN "'${itemValues.ena_num}" to the stock`};
 			}				
 		} catch(err) { throw err} 
 	};
@@ -77,9 +77,9 @@ module.exports = class Stock {
 
 				if(newQuantity === 0 || newQuantity < 0) await this.db.get(`UPDATE stock SET quantity = "0", quantity_sold = "${item_specs.quantity}"  WHERE ena_num="${itemValues.ena_num}";`);
 				else await this.db.get(`UPDATE stock SET quantity = "${newQuantity}", quantity_sold = "${Number(itemValues.quantity)}"  WHERE ena_num="${itemValues.ena_num}";`)
-				return true;
+				return {status:true, message:`removed item(s) with EAN "'${itemValues.ena_num}" from the stock`};
 
-			}else return false;			
+			}else return {status:false, message:`Item with "'${itemValues.ena_num}'" does not exist in the stock!`};			
 		}catch(err) {throw err;}
 	};
 
