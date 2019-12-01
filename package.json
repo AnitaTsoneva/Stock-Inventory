@@ -12,7 +12,7 @@
     "start": "node index.js",
     "jsdoc": "node_modules/.bin/jsdoc -c jsdoc.conf",
     "linter": "node_modules/.bin/eslint .",
-    "test": "./node_modules/.bin/jest --coverage 'unit tests/'"
+    "test": "node_modules/.bin/jest --coverage --runInBand"
   },
   "jest": {
     "projects": [

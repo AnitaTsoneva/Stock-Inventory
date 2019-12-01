@@ -31,29 +31,20 @@ module.exports = class User {
 	 */
 	async register(userValues) {
 		try {
-
-			if(userValues.user.length === 0) throw new Error('missing username')
-			if(userValues.pass.length === 0) throw new Error('missing password')
+			console.log(userValues)
+			console.log(userValues.user.length)
+			if(userValues.user.length === 0) throw new Error('Missing username!')
+			if(userValues.pass.length === 0) throw new Error('Missing password!')
 			let sql = `SELECT COUNT(id) as records FROM users WHERE user="${userValues.user}";`
 			const data = await this.db.get(sql)
 			if(data.records !== 0) throw new Error(`username "${userValues.user}" already in use`)
 			userValues.pass = await bcrypt.hash(userValues.pass, saltRounds)
 			sql = `INSERT INTO users(user, pass, department) VALUES("${userValues.user}", "${userValues.pass}", "${userValues.department}")`
-			await this.db.run(sql)
-			return true
+			await this.db.run(sql);
+			return true;
 		} catch(err) {
 			throw err
 		}
-	}
-
-	/**
-	 * Upload user's photo.
-	 */
-	async uploadPicture(path, mimeType) {
-		const extension = mime.extension(mimeType)
-		console.log(`path: ${path}`)
-		console.log(`extension: ${extension}`)
-		//await fs.copy(path, `public/avatars/${username}.${fileExtension}`)
 	}
 
 	/**
@@ -80,29 +71,13 @@ module.exports = class User {
 	 */
 	async user_department(username) {
 		try {
+			if(username.length === 0) throw new Error('Missing username!')
 			let department = [{stock_control:false}, {returns:false}, {till:false}, {adulting_team:false}];
 			var sql = `SELECT department FROM users WHERE user = "${username}";`
 			const db_response = await this.db.get(sql);	
-			
-			switch(db_response.department){
-				case 'stock_control':
-					department[0].stock_control = true;
-					break;
-				case 'returns':
-					department[1].returns = true;
-					break;
-				case 'till':
-					department[2].till = true;
-					break;
-				case 'adulting_team':
-					department[3].adulting_team = true;
-					break;
-			}
-			
+			switch(db_response.department){case 'stock_control': department[0].stock_control = true; break; case 'returns':department[1].returns = true; break; case 'till': department[2].till = true; break; case 'adulting_team': department[3].adulting_team = true; break;}
 			return department;
-		} catch(err) {
-			throw err
-		}
+		} catch(err) {throw err;}
 	};
 
 }
