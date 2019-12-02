@@ -76,17 +76,11 @@ router.get('/view_permissions', async ctx => {
  */
 router.post('/stock', koaBody, async ctx => {
 	try {
-
 		const body = ctx.request.body;
-		const stock = await new Stock(dbName)
-		const result = await stock.addItem(body)
+		const stock = await new Stock(dbName);
+		await stock.addItem(body);
 		const response = await stock.getAllItems();
-		
-
-		
-		await ctx.render('index', response)
-		//ctx.redirect(`/index`)
-		// redirect to the home page
+		await ctx.render('index', response.data);
 
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
@@ -103,10 +97,11 @@ router.post('/stock', koaBody, async ctx => {
 router.post('/stock_remove', koaBody, async ctx => {
 	try {
 		const body = ctx.request.body;
-	
 		const stock = await new Stock(dbName)
-		var result = await stock.removeItem(body);
+		var response = await stock.removeItem(body);
 
+		if (response.status === true) await ctx.render('success', {message: response.message})
+		else  await ctx.render('error', {message: response.message})
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
@@ -115,15 +110,12 @@ router.post('/stock_remove', koaBody, async ctx => {
 router.post('/stock_add', koaBody, async ctx => {
 	try {
 		const body = ctx.request.body;
-		//console.log(ctx.request.body)
-		
 		const stock = await new Stock(dbName)
-		var result = await stock.addItem(body)
-		
-		var response = await stock.getAllItems();
+		var response = await stock.addItem(body)
+		await stock.getAllItems();
 
-
-		ctx.redirect(`/?msg=new item "${body.item}" added`)
+		if (response.status === true) await ctx.render('success', {message: response.message})
+		else  await ctx.render('error', {message: response.message})
 
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
@@ -151,14 +143,10 @@ router.get('/register', async ctx => await ctx.render('register'));
  */
 router.post('/register', koaBody, async ctx => {
 	try {
-		// extract the data from the request
-		const body = ctx.request.body
-		// call the functions in the module
-		const user = await new User(dbName)
-		await user.register(body)
-		// await user.uploadPicture(path, type)
-		// redirect to the home page
-		ctx.redirect(`/?msg=new user "${body.name}" added`)
+		const body = ctx.request.body;
+		const user = await new User(dbName);
+		await user.register(body);
+		ctx.redirect(`/?msg=new user "${body.name}" added`);
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
 	}
@@ -202,7 +190,7 @@ router.post('/login', async ctx => {
 		const overall_sales = await stock.getOverallSales();
 		const items = await stock.getAllItems();
 	
-		await ctx.render('index', {username: body.user, department:department, items: items, overall_sales:overall_sales})
+		await ctx.render('index', {username: body.user, department:department, items: items.data, overall_sales:overall_sales})
 		//return ctx.redirect('/?msg=you are now logged in...')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
@@ -215,4 +203,6 @@ router.get('/logout', async ctx => {
 });
 
 app.use(router.routes())
-module.exports = app.listen(port, async() => console.log(`Listening on port.. ${port}`))
+
+const server = app.listen(port, async() => console.log(`Listening on port.. ${port}`));
+module.exports = server;

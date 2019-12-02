@@ -17,3 +17,4 @@ module.exports = {
 		'/__tests__/fixtures/',
 	]
 }
+
