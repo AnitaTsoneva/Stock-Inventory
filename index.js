@@ -43,8 +43,6 @@ const dbName = 'website.db'
  */
 router.get('/', async ctx => {
 	try {
-		console.log('!!!!!!!!!!!!!!!!!!!!!!!!')
-		console.log(ctx)
 		if(ctx.session.authorised !== true) return ctx.redirect('/login?msg=you need to log in')
 		const data = {}
 		if(ctx.query.msg) data.msg = ctx.query.msg
@@ -82,14 +80,7 @@ router.post('/stock', koaBody, async ctx => {
 		const stock = await new Stock(dbName);
 		await stock.addItem(body);
 		const response = await stock.getAllItems();
-<<<<<<< HEAD
-		
-		await ctx.render('index', response)
-		//ctx.redirect(`/index`)
-		// redirect to the home page
-=======
 		await ctx.render('index', response.data);
->>>>>>> development
 
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
@@ -171,19 +162,9 @@ router.post('/register', koaBody, async ctx => {
  */
 router.get('/login', async ctx => {
 	const data = {}
-	console.log('-------1-------')
-
-	console.log(ctx.query.msg)
-	console.log(ctx.query.user)
-
 	if(ctx.query.msg) data.msg = ctx.query.msg
 	if(ctx.query.user) data.user = ctx.query.user
-
-	ctx.body = {
-		status: 'success',
-		data: data
-	};
-	//ctx.body('login', data)
+	await ctx.render('login', data)
 });
 
 /**
@@ -199,9 +180,6 @@ router.get('/login', async ctx => {
 router.post('/login', async ctx => {
 	try {
 		const body = ctx.request.body;
-		console.log('-------2-------')
-
-		console.log(ctx.request.body)
 		const user = await new User(dbName);
 		const stock = await new Stock(dbName);
 		await user.login(body.user, body.pass);
@@ -211,21 +189,8 @@ router.post('/login', async ctx => {
 	
 		const overall_sales = await stock.getOverallSales();
 		const items = await stock.getAllItems();
-<<<<<<< HEAD
-		
-		//console.log(items)
-		ctx.body = {
-			status: 'success',
-			username: body.user,
-			department:department, 
-			items: items, 
-			overall_sales:overall_sales
-		};
-		//await ctx.render('index', {username: body.user, department:department, items: items, overall_sales:overall_sales})
-=======
 	
 		await ctx.render('index', {username: body.user, department:department, items: items.data, overall_sales:overall_sales})
->>>>>>> development
 		//return ctx.redirect('/?msg=you are now logged in...')
 	} catch(err) {
 		await ctx.render('error', {message: err.message})
@@ -238,10 +203,6 @@ router.get('/logout', async ctx => {
 });
 
 app.use(router.routes())
-<<<<<<< HEAD
-module.exports = app.listen(port, async() => console.log(`Server listening on port: ${port}`))
-=======
 
 const server = app.listen(port, async() => console.log(`Listening on port.. ${port}`));
 module.exports = server;
->>>>>>> development
